@@ -14,16 +14,28 @@ import com.cmpt276.scoreapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
+    GameManager gameManager = GameManager.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        GameManager gameManager = GameManager.getInstance();
+
+        //TextView testView = (TextView)findViewById(R.id.test);
 
         super.onCreate(savedInstanceState);
 
@@ -32,14 +44,16 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         binding.fab.setOnClickListener(view -> {
             Intent i = AddGame.makeLaunchIntent(MainActivity.this,"Add New Game");
             startActivity(i);
         });
+
+        populateListView();
     }
 
     @Override
@@ -79,6 +93,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(){
-        //TextView a = findViewById();
+        //TextView a = findViewById(R.id.test);
+        //Toast.makeText(this,"Exit Edit", Toast.LENGTH_SHORT).show();
+        //if (gameManager.gameCount >= 1){
+            //Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
+            //a.setText( gameManager.getGame(0).getMaxScoreString() );
+        //}
     }
+
+    private void populateListView(){
+        ArrayAdapter<Game> adapter = new MyListAdapter();
+        ListView list = (ListView) findViewById(R.id.gamelist);
+        list.setAdapter(adapter);
+    }
+
+    private class MyListAdapter extends ArrayAdapter<Game>{
+        public MyListAdapter(){
+            super(MainActivity.this,R.layout.item_view,gameManager.games);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            View itemView = convertView;
+            if (itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
+            }
+
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView1);
+            TextView test = (TextView) itemView.findViewById(R.id.textView1);
+            test.setText(gameManager.getGame(position).getMaxScoreString());
+
+            //Fill the view
+            return itemView;
+        }
+    }
+
+
+
 }

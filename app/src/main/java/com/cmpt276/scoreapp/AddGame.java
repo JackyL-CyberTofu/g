@@ -25,10 +25,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import com.cmpt276.scoreapp.databinding.ActivityAddDaThingBinding;
 
+import java.text.BreakIterator;
+
 public class AddGame extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityAddDaThingBinding binding;
+    GameManager gameManager = GameManager.getInstance();
 
 
     private static final String EXTRA_MESSAGE = "Extra - message";
@@ -48,7 +51,7 @@ public class AddGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        GameManager gameManager = GameManager.getInstance();
+
 
         this.setTitle("Add Game");
         super.onCreate(savedInstanceState);
@@ -70,6 +73,7 @@ public class AddGame extends AppCompatActivity {
         //Intent i = getIntent();
         //String message = i.getStringExtra(EXTRA_MESSAGE);
         //Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+
 
         TextView scoresOne = (TextView)findViewById(R.id.scoresOne);
         TextView scoresTwo = (TextView)findViewById(R.id.scoresTwo);
@@ -214,8 +218,16 @@ public class AddGame extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if (item.getItemId() == R.id.saveButton){
-            Toast.makeText(this,"Save", Toast.LENGTH_SHORT).show();
+
+            TextView temp = (TextView)findViewById(R.id.player1Cards);
+            String temp2 = temp.getText().toString();
+            int temp3 = Integer.parseInt(temp2);
+            if (temp2!="-"){
+                Game test = new Game(temp3);
+                gameManager.addGame(test);}
+                Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
         }
+        finish();
         return super.onOptionsItemSelected(item);
     }
 

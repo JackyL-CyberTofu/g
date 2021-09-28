@@ -140,4 +140,8 @@ public class Game {
         return maxScore;
     }
 
+    public String getMaxScoreString() {
+        return Integer.toString(maxScore);
+    }
+
 }
