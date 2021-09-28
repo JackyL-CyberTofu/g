@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        GameManager gameManager = GameManager.getInstance();
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -66,5 +69,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    //Update UI after backing out
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
+    private void updateUI(){
+        //TextView a = findViewById();
     }
 }

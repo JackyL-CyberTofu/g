@@ -47,6 +47,9 @@ public class AddGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        GameManager gameManager = GameManager.getInstance();
+
         this.setTitle("Add Game");
         super.onCreate(savedInstanceState);
 
@@ -207,6 +210,7 @@ public class AddGame extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //Pressed Action bar button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if (item.getItemId() == R.id.saveButton){
