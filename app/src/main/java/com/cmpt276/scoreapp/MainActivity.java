@@ -120,8 +120,25 @@ public class MainActivity extends AppCompatActivity {
             }
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView1);
-            TextView test = (TextView) itemView.findViewById(R.id.textView1);
-            test.setText(gameManager.getGame(position).getMaxScoreString());
+
+
+            TextView upper = (TextView) itemView.findViewById(R.id.textView1);
+            upper.setText(gameManager.getGame(0).getScore1() + " vs " + gameManager.getGame(0).getScore2());
+
+            TextView under = (TextView) itemView.findViewById(R.id.textView2);
+            if (gameManager.getGame(position).tie){
+                under.setText(gameManager.getGame(position).time);
+                imageView.setImageResource(R.drawable.ic_baseline_crop_square_24);
+            }
+            else if(gameManager.getGame(position).playerOneWin){
+                under.setText(gameManager.getGame(position).time);
+                imageView.setImageResource(R.drawable.ic_baseline_looks_one_24);
+            }
+            else if (gameManager.getGame(position).playerTwoWin){
+                under.setText(gameManager.getGame(position).time);
+                imageView.setImageResource(R.drawable.ic_baseline_looks_two_24);
+
+            }
 
             //Fill the view
             return itemView;

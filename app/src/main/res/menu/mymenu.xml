@@ -4,7 +4,13 @@
     <item
         android:id="@+id/saveButton"
         android:icon="@drawable/ic_baseline_save_24"
-        android:title="Run Fast"
+        android:title="Save"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/deleteButton"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="Delete"
         app:showAsAction="ifRoom"
         />
 </menu>

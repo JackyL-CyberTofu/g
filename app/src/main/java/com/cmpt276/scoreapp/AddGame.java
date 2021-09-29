@@ -219,15 +219,54 @@ public class AddGame extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if (item.getItemId() == R.id.saveButton){
 
-            TextView temp = (TextView)findViewById(R.id.player1Cards);
-            String temp2 = temp.getText().toString();
-            int temp3 = Integer.parseInt(temp2);
-            if (temp2!="-"){
-                Game test = new Game(temp3);
-                gameManager.addGame(test);}
-                Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
+                TextView temp = (TextView)findViewById(R.id.scoresOne);
+                String temp3 = temp.getText().toString();
+
+                temp = (TextView)findViewById(R.id.scoresTwo);
+                String temp4 = temp.getText().toString();
+
+                if (!temp3.equals("-") && !temp4.equals("-")){
+
+                    int score1 = Integer.parseInt(temp3);
+                    int score2 = Integer.parseInt(temp4);
+
+                    temp = (TextView)findViewById(R.id.player1Cards);
+                    String temp2 = temp.getText().toString();
+                    int player1cards = Integer.parseInt(temp2);
+
+                    temp = (TextView)findViewById(R.id.player2Cards);
+                    temp2 = temp.getText().toString();
+                    int player2cards = Integer.parseInt(temp2);
+
+                    temp = (TextView)findViewById(R.id.player1Points);
+                    temp2 = temp.getText().toString();
+                    int player1points = Integer.parseInt(temp2);
+
+                    temp = (TextView)findViewById(R.id.player2Points);
+                    temp2 = temp.getText().toString();
+                    int player2points = Integer.parseInt(temp2);
+
+                    temp = (TextView)findViewById(R.id.player1Wager);
+                    temp2 = temp.getText().toString();
+                    int player1wager = Integer.parseInt(temp2);
+
+                    temp = (TextView)findViewById(R.id.player2Wager);
+                    temp2 = temp.getText().toString();
+                    int player2wager = Integer.parseInt(temp2);
+
+                    Game test = new Game(player1cards,player2cards,player1points,player2points,player1wager,player2wager,score1,score2);
+                    gameManager.addGame(test);
+                    Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else {
+                    Toast.makeText(this,"Empty fields detected", Toast.LENGTH_SHORT).show();
+                }
         }
-        finish();
+        else if (item.getItemId() == R.id.deleteButton){
+            Toast.makeText(this,"deleted game",Toast.LENGTH_SHORT).show();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

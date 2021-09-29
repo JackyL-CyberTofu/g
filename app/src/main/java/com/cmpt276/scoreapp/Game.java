@@ -8,108 +8,60 @@ public class Game {
 
     LocalDateTime creationTime;
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(@yyyy-MM-dd HH:mm)");
+    String time;
 
     int playerWon=0;
     int playerCount=0;
     int maxScore;
 
+    public boolean tie = false;
     public boolean playerOneWin = false;
     public boolean playerTwoWin = false;
-    public boolean playerThreeWin = false;
-    public boolean playerFourWin = false;
 
+    int playerOneScore = 0;
+    int playerTwoScore = 0;
+
+    int playerOneCards = 0;
+    int playerTwoCards = 0;
+
+    int playerOnePoints = 0;
+    int playerTwoPoints = 0;
+
+    int playerOneWager = 0;
+    int playerTwoWager = 0;
+
+    boolean isEdit = false;
 
     ArrayList<Integer> scores = new ArrayList<Integer>();
 
-    public Game(int score1) {
-        playerCount=1;
-        this.creationTime = LocalDateTime.now();
-        playerOneWin = true;
-        scores.add(score1);
+    public Game(int cards1, int cards2, int points1, int points2, int wager1, int wager2, int score1, int score2) {
 
-        this.maxScore = score1;
-        if (score1 == this.maxScore){
-            this.playerOneWin = true;
-        }
-
-    }
-
-    public Game(int score1, int score2) {
         playerCount=2;
         this.creationTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.time = creationTime.format(formatter);
         //findWinner(score1,score2,0,0);
-        scores.add(score1);
-        scores.add(score2);
+        this.playerOneCards = cards1;
+        this.playerOnePoints = points1;
+        this.playerOneWager = wager1;
+        this.playerOneScore = score1;
 
-        this.maxScore = Math.max(score1,score2);
-        if (score1 == this.maxScore){
+        this.playerTwoCards = cards2;
+        this.playerTwoPoints = points2;
+        this.playerTwoWager = wager2;
+        this.playerTwoScore = score2;
+
+        this.maxScore = Math.max(score1, score2);
+        if (maxScore == score1 && score1 == score2){
+            this.tie = true;
+        }
+        if (this.maxScore == score1){
             this.playerOneWin = true;
         }
-        if (score2 == this.maxScore){
+        else {
             this.playerTwoWin = true;
         }
 
-    }
-
-    public Game(int score1, int score2, int score3) {
-        playerCount=3;
-        this.creationTime = LocalDateTime.now();
-        //findWinner(score1,score2,score3,0);
-        scores.add(score1);
-        scores.add(score2);
-        scores.add(score3);
-
-        this.maxScore = Math.max(score1,Math.max(score2,score3));
-        if (score1 == this.maxScore){
-            this.playerOneWin = true;
-        }
-        if (score2 == this.maxScore){
-            this.playerTwoWin = true;
-        }
-        if (score3 == this.maxScore){
-            this.playerThreeWin = true;
-        }
-
-    }
-
-    public Game(int score1, int score2, int score3, int score4) {
-        playerCount=4;
-        this.creationTime = LocalDateTime.now();
-        //findWinner(score1,score2,score3,score4);
-        scores.add(score1);
-        scores.add(score2);
-        scores.add(score3);
-        scores.add(score4);
-
-        this.maxScore = Math.max(score1,Math.max(score2,Math.max(score3,score4)));
-        if (score1 == this.maxScore){
-            this.playerOneWin = true;
-        }
-        if (score2 == this.maxScore){
-            this.playerTwoWin = true;
-        }
-        if (score3 == this.maxScore){
-            this.playerThreeWin = true;
-        }
-        if (score4 == this.maxScore){
-            this.playerFourWin = true;
-        }
-    }
-
-    public void findWinner(int score1, int score2, int score3, int score4){
-        this.maxScore = Math.max(score1,Math.max(score2,Math.max(score3,score4)));
-        if (score1 == this.maxScore){
-            this.playerOneWin = true;
-        }
-        if (score2 == this.maxScore){
-            this.playerTwoWin = true;
-        }
-        if (score3 == this.maxScore){
-            this.playerThreeWin = true;
-        }
-        if (score4 == this.maxScore){
-            this.playerFourWin = true;
-        }
     }
 
     public int getScore (int pos){
@@ -142,6 +94,14 @@ public class Game {
 
     public String getMaxScoreString() {
         return Integer.toString(maxScore);
+    }
+
+    public String getScore1(){
+        return Integer.toString(playerOneScore);
+    }
+
+    public String getScore2(){
+        return Integer.toString(playerTwoScore);
     }
 
 }
