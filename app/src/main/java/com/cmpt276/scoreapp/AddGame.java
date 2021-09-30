@@ -24,6 +24,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.cmpt276.scoreapp.databinding.ActivityAddDaThingBinding;
+import com.cmpt276.scoreapp.MainActivity;
+
 
 import java.text.BreakIterator;
 
@@ -32,6 +34,11 @@ public class AddGame extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityAddDaThingBinding binding;
     GameManager gameManager = GameManager.getInstance();
+
+    int position=0;
+    boolean isEdit=false;
+    String title;
+
 
 
     private static final String EXTRA_MESSAGE = "Extra - message";
@@ -51,10 +58,22 @@ public class AddGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
-        this.setTitle("Add Game");
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+
+        if(extras!=null){
+            position = extras.getInt("position");
+            isEdit = extras.getBoolean("isEdit");
+            title = extras.getString("title");
+        }
+
+        if(isEdit){
+            Toast.makeText(this,"editing with title "+title,Toast.LENGTH_SHORT).show();
+            //this.setTitle("Edit Game");
+        }
+
+        this.setTitle(title);
 
         binding = ActivityAddDaThingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -75,6 +94,7 @@ public class AddGame extends AppCompatActivity {
         //Toast.makeText(this,message,Toast.LENGTH_LONG).show();
 
 
+
         TextView scoresOne = (TextView)findViewById(R.id.scoresOne);
         TextView scoresTwo = (TextView)findViewById(R.id.scoresTwo);
 
@@ -84,6 +104,19 @@ public class AddGame extends AppCompatActivity {
         EditText player2Points = (EditText)findViewById(R.id.player2Points);
         EditText player1Wager = (EditText)findViewById(R.id.player1Wager);
         EditText player2Wager = (EditText)findViewById(R.id.player2Wager);
+
+
+
+        if(isEdit){
+            player1Cards.setText(Integer.toString(gameManager.getGame(position).playerOneCards), TextView.BufferType.EDITABLE);
+            player2Cards.setText(Integer.toString(gameManager.getGame(position).playerTwoCards), TextView.BufferType.EDITABLE);
+            player1Points.setText(Integer.toString(gameManager.getGame(position).playerOnePoints), TextView.BufferType.EDITABLE);
+            player2Points.setText(Integer.toString(gameManager.getGame(position).playerTwoPoints), TextView.BufferType.EDITABLE);
+            player1Wager.setText(Integer.toString(gameManager.getGame(position).playerOneWager), TextView.BufferType.EDITABLE);
+            player2Wager.setText(Integer.toString(gameManager.getGame(position).playerTwoWager), TextView.BufferType.EDITABLE);
+            scoresOne.setText(Integer.toString(calculateScore(Integer.parseInt(player1Cards.getText().toString()), Integer.parseInt(player1Wager.getText().toString()), Integer.parseInt(player1Points.getText().toString()))));
+            scoresTwo.setText(Integer.toString(calculateScore(Integer.parseInt(player2Cards.getText().toString()), Integer.parseInt(player2Wager.getText().toString()), Integer.parseInt(player2Points.getText().toString()))));
+        }
 
         // Read Text
         player1Cards.addTextChangedListener(new TextWatcher() {
@@ -254,9 +287,39 @@ public class AddGame extends AppCompatActivity {
                     temp2 = temp.getText().toString();
                     int player2wager = Integer.parseInt(temp2);
 
+                    if (!isEdit){
                     Game test = new Game(player1cards,player2cards,player1points,player2points,player1wager,player2wager,score1,score2);
-                    gameManager.addGame(test);
-                    Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
+                    gameManager.addGame(test);}
+                    else {
+                        gameManager.getGame(position).playerOneWager = player1wager;
+                        gameManager.getGame(position).playerOneCards = player1cards;
+                        gameManager.getGame(position).playerOnePoints = player1points;
+                        gameManager.getGame(position).playerOneScore = score1;
+
+                        gameManager.getGame(position).playerTwoWager = player2wager;
+                        gameManager.getGame(position).playerTwoCards = player2cards;
+                        gameManager.getGame(position).playerTwoPoints = player2points;
+                        gameManager.getGame(position).playerTwoScore = score2;
+
+                        if(score1==score2){
+                            gameManager.getGame(position).tie = true;
+                            gameManager.getGame(position).playerOneWin = false;
+                            gameManager.getGame(position).playerTwoWin = false;
+                        }
+                        else if (score1 > score2){
+                            gameManager.getGame(position).tie = false;
+                            gameManager.getGame(position).playerOneWin = true;
+                            gameManager.getGame(position).playerTwoWin = false;
+                        }
+                        else{
+                            gameManager.getGame(position).tie = false;
+                            gameManager.getGame(position).playerOneWin = false;
+                            gameManager.getGame(position).playerTwoWin = true;
+                        }
+                    }
+
+
+                    Toast.makeText(this,"Added "+Integer.toString(gameManager.gameCount), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
@@ -264,7 +327,9 @@ public class AddGame extends AppCompatActivity {
                 }
         }
         else if (item.getItemId() == R.id.deleteButton){
-            Toast.makeText(this,"deleted game",Toast.LENGTH_SHORT).show();
+            gameManager.deleteGame(position+1);
+            Toast.makeText(this,"deleted game "+position,Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -277,6 +342,18 @@ public class AddGame extends AppCompatActivity {
         }
         return temp;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Intent refresh = new Intent(this, MainActivity.class);
+            startActivity(refresh);
+            this.finish();
+        }
+    }
+
+
 
     //@Override
     //public boolean onSupportNavigateUp() {

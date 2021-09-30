@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     GameManager gameManager = GameManager.getInstance();
+
+
+    //ArrayAdapter<Game> adapter = new MyListAdapter();
+    //ArrayAdapter<Game> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +56,33 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fab.setOnClickListener(view -> {
             Intent i = AddGame.makeLaunchIntent(MainActivity.this,"Add New Game");
+            i.putExtra("position", 0);
+            i.putExtra("isEdit", false);
+            i.putExtra("title", "New Game");
             startActivity(i);
         });
 
+        ArrayAdapter<Game> adapter = new MyListAdapter();
         populateListView();
+        ListView list = (ListView) findViewById(R.id.gamelist);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (gameManager.gameCount!=0){
+                Toast.makeText(view.getContext(), "Clicked on item "+i, Toast.LENGTH_SHORT).show();}
+                Intent k = AddGame.makeLaunchIntent(MainActivity.this,"Add New Game");
+                k.putExtra("position", i);
+                k.putExtra("isEdit", true);
+                k.putExtra("title", "Edit Game");
+                startActivity(k);
+                //adapter.notifyDataSetChanged();
+            }
+        });
+
+        //adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -89,22 +118,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected  void onResume(){
         super.onResume();
-        updateUI();
+
     }
 
     private void updateUI(){
-        //TextView a = findViewById(R.id.test);
-        //Toast.makeText(this,"Exit Edit", Toast.LENGTH_SHORT).show();
-        //if (gameManager.gameCount >= 1){
-            //Toast.makeText(this,"Max score "+gameManager.getGame(0).maxScore, Toast.LENGTH_SHORT).show();
-            //a.setText( gameManager.getGame(0).getMaxScoreString() );
-        //}
+
     }
 
     private void populateListView(){
-        ArrayAdapter<Game> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.gamelist);
-        list.setAdapter(adapter);
+
     }
 
     private class MyListAdapter extends ArrayAdapter<Game>{
@@ -123,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             TextView upper = (TextView) itemView.findViewById(R.id.textView1);
-            upper.setText(gameManager.getGame(0).getScore1() + " vs " + gameManager.getGame(0).getScore2());
+            upper.setText(gameManager.getGame(position).getScore1() + " vs " + gameManager.getGame(position).getScore2());
 
             TextView under = (TextView) itemView.findViewById(R.id.textView2);
             if (gameManager.getGame(position).tie){
@@ -140,11 +162,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+
             //Fill the view
             return itemView;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Intent refresh = new Intent(this, MainActivity.class);
+            startActivity(refresh);
+            this.finish();
+        }
+    }
 
 
 }
