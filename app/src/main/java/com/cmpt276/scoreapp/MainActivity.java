@@ -1,6 +1,7 @@
 package com.cmpt276.scoreapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cmpt276.scoreapp.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +28,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     GameManager gameManager = GameManager.getInstance();
+    //SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
 
 
     //ArrayAdapter<Game> adapter = new MyListAdapter();
@@ -42,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TextView testView = (TextView)findViewById(R.id.test);
-
+        loadData();
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         populateListView();
         ListView list = (ListView) findViewById(R.id.gamelist);
         list.setAdapter(adapter);
+        list.setEmptyView(findViewById(R.id.emptyList));
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,11 +87,36 @@ public class MainActivity extends AppCompatActivity {
                 k.putExtra("isEdit", true);
                 k.putExtra("title", "Edit Game");
                 startActivity(k);
+                //saveData();
                 //adapter.notifyDataSetChanged();
             }
         });
 
-        //adapter.notifyDataSetChanged();
+
+
+    }
+
+    private void saveData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //editor.putString("GameList", Objectser)
+        Gson gson = new Gson();
+        String json = gson.toJson(gameManager.games);
+        editor.putString("games", json);
+
+        //sharedPreferences.set
+        editor.apply();
+    }
+
+    private void loadData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("games", "");
+        Type type = new TypeToken<ArrayList<Game>>() {}.getType();
+        gameManager.games = gson.fromJson(json,type);
+        //if (gameManager==null){
+            //gameManager.games = new ArrayList<>();
+        //}
 
     }
 
@@ -118,11 +153,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected  void onResume(){
         super.onResume();
-
+        updateUI();
     }
 
     private void updateUI(){
-
+        saveData();
+        //loadData();
+        ArrayAdapter<Game> adapter = new MyListAdapter();
+        populateListView();
+        ListView list = (ListView) findViewById(R.id.gamelist);
+        list.setAdapter(adapter);
+        if(adapter.isEmpty()){
+            ImageView emptyImage = (ImageView) findViewById(R.id.emptyImage);
+            emptyImage.setVisibility(View.VISIBLE);
+        }
+        else{
+            ImageView emptyImage = (ImageView) findViewById(R.id.emptyImage);
+            emptyImage.setVisibility(View.GONE);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void populateListView(){

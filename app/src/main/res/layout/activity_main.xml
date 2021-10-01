@@ -29,10 +29,30 @@
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/ic_baseline_add_24" />
 
+    <TextView
+        android:id="@+id/emptyList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginRight="100dp"
+        android:text="NO GAMES \n Add new game by pressing + on the bottom right corner"
+        />
+
+    <ImageView
+        android:id="@+id/emptyImage"
+        android:layout_width="79dp"
+        android:layout_height="69dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="275dp"
+        app:srcCompat="@drawable/ic_baseline_follow_the_signs_24" />
+
     <ListView
         android:id="@+id/gamelist"
         android:layout_marginTop="58dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </ListView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,10 +2,13 @@ package com.cmpt276.scoreapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
@@ -25,6 +28,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import com.cmpt276.scoreapp.databinding.ActivityAddDaThingBinding;
 import com.cmpt276.scoreapp.MainActivity;
+import com.google.gson.Gson;
 
 
 import java.text.BreakIterator;
@@ -38,7 +42,7 @@ public class AddGame extends AppCompatActivity {
     int position=0;
     boolean isEdit=false;
     String title;
-
+    boolean hasEdit = false;
 
 
     private static final String EXTRA_MESSAGE = "Extra - message";
@@ -93,6 +97,44 @@ public class AddGame extends AppCompatActivity {
         //String message = i.getStringExtra(EXTRA_MESSAGE);
         //Toast.makeText(this,message,Toast.LENGTH_LONG).show();
 
+        //AlertDialog dialog3 = new AlertDialog.Builder(AddGame.this).setTitle("WARNING").setMessage("Unsaved Changed. Do you want to continue?").setPositiveButton("Confirm", null).setNegativeButton("Back", null).create();
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(AddGame.this,"back button", Toast.LENGTH_SHORT).show();
+                if(hasEdit){
+                    Toast.makeText(AddGame.this,"entered loop", Toast.LENGTH_SHORT).show();
+
+                    AlertDialog dialog2 = new AlertDialog.Builder(AddGame.this).setTitle("WARNING").setMessage("Unsaved Changed. Do you want to continue?").setPositiveButton("Confirm", null).setNegativeButton("Back", null).show();
+
+                    Button positiveButton = dialog2.getButton(AlertDialog.BUTTON_POSITIVE);
+                    positiveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //gameManager.deleteGame(position+1);
+                            //Toast.makeText(AddGame.this,"deleted game "+position,Toast.LENGTH_SHORT).show();
+                            dialog2.dismiss();
+                            finish();
+                        }
+                    });
+
+                    Button negativeButton = dialog2.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    negativeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(AddGame.this, "Aborted", Toast.LENGTH_SHORT).show();
+                            dialog2.dismiss();
+                        }
+                    });
+                }
+                else{
+                    finish();
+                }
+            }
+        });
+
 
 
         TextView scoresOne = (TextView)findViewById(R.id.scoresOne);
@@ -130,6 +172,7 @@ public class AddGame extends AppCompatActivity {
                 //int a = calculateScore( Integer.parseInt(player1Cards.getText().toString()) ,Integer.parseInt(player1Wager.getText().toString()), Integer.parseInt(player1Points.getText().toString()) );
                 //int a = 32;
                 //String b = a.toString();
+                hasEdit = true;
                 if (charSequence.length() != 0 && player1Points.length() != 0 && player1Wager.length() !=0 )
                     scoresOne.setText(Integer.toString(calculateScore(Integer.parseInt(player1Cards.getText().toString()), Integer.parseInt(player1Wager.getText().toString()), Integer.parseInt(player1Points.getText().toString()))));
                 else {
@@ -146,6 +189,8 @@ public class AddGame extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hasEdit = true;
+
                 if (charSequence.length() != 0 && player2Points.length() != 0 && player2Wager.length() !=0 ){
                     //scoresTwo.setText(player2Cards.getText().toString());
                     scoresTwo.setText(Integer.toString(calculateScore(Integer.parseInt(player2Cards.getText().toString()), Integer.parseInt(player2Wager.getText().toString()), Integer.parseInt(player2Points.getText().toString()))));
@@ -165,7 +210,10 @@ public class AddGame extends AppCompatActivity {
 
             @SuppressLint("SetTextI18n")
             @Override
+
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hasEdit = true;
+
                 if (charSequence.length() != 0 && player1Cards.length() != 0 && player1Wager.length() !=0 ){
                     //scoresOne.setText(player1Cards.getText().toString());
                     scoresOne.setText(Integer.toString(calculateScore(Integer.parseInt(player1Cards.getText().toString()), Integer.parseInt(player1Wager.getText().toString()), Integer.parseInt(player1Points.getText().toString()))));
@@ -184,6 +232,8 @@ public class AddGame extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hasEdit = true;
+
                 if (charSequence.length() != 0 && player2Cards.length() != 0 && player2Wager.length() !=0 ){
                     //scoresTwo.setText(player2Cards.getText().toString());
                     scoresTwo.setText(Integer.toString(calculateScore(Integer.parseInt(player2Cards.getText().toString()), Integer.parseInt(player2Wager.getText().toString()), Integer.parseInt(player2Points.getText().toString()))));
@@ -204,6 +254,8 @@ public class AddGame extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hasEdit = true;
+
                 if (charSequence.length() != 0 && player1Points.length() != 0 && player1Cards.length() !=0 ){
                     //scoresOne.setText(player1Cards.getText().toString());
                     scoresOne.setText(Integer.toString(calculateScore(Integer.parseInt(player1Cards.getText().toString()), Integer.parseInt(player1Wager.getText().toString()), Integer.parseInt(player1Points.getText().toString()))));
@@ -223,6 +275,8 @@ public class AddGame extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hasEdit = true;
+
                 if (charSequence.length() != 0 && player2Points.length() != 0 && player2Cards.length() !=0 ){
                     //scoresTwo.setText(player2Cards.getText().toString());
                     scoresTwo.setText(Integer.toString(calculateScore(Integer.parseInt(player2Cards.getText().toString()), Integer.parseInt(player2Wager.getText().toString()), Integer.parseInt(player2Points.getText().toString()))));
@@ -258,34 +312,39 @@ public class AddGame extends AppCompatActivity {
                 temp = (TextView)findViewById(R.id.scoresTwo);
                 String temp4 = temp.getText().toString();
 
-                if (!temp3.equals("-") && !temp4.equals("-")){
+                temp = (TextView)findViewById(R.id.player1Cards);
+                String temp2 = temp.getText().toString();
+                int player1cards = Integer.parseInt(temp2);
+
+                temp = (TextView)findViewById(R.id.player2Cards);
+                temp2 = temp.getText().toString();
+                int player2cards = Integer.parseInt(temp2);
+
+                temp = (TextView)findViewById(R.id.player1Points);
+                temp2 = temp.getText().toString();
+                int player1points = Integer.parseInt(temp2);
+
+                temp = (TextView)findViewById(R.id.player2Points);
+                temp2 = temp.getText().toString();
+                int player2points = Integer.parseInt(temp2);
+
+                temp = (TextView)findViewById(R.id.player1Wager);
+                temp2 = temp.getText().toString();
+                int player1wager = Integer.parseInt(temp2);
+
+                temp = (TextView)findViewById(R.id.player2Wager);
+                temp2 = temp.getText().toString();
+                int player2wager = Integer.parseInt(temp2);
+
+                if (!temp3.equals("-") && !temp4.equals("-") && player1cards!=0  && player1points!=0 && player1wager!=0 && player2cards!=0  && player2points!=0 && player2wager!=0||
+                        !temp3.equals("-") && !temp4.equals("-") && player1cards==0  && player1points==0 && player1wager==0 && player2cards!=0  && player2points!=0 && player2wager!=0 ||
+                        !temp3.equals("-") && !temp4.equals("-") && player1cards!=0  && player1points!=0 && player1wager!=0 && player2cards==0  && player2points==0 && player2wager==0||
+                        !temp3.equals("-") && !temp4.equals("-") && player2cards==0  && player2points==0 && player2wager==0 && player1cards==0  && player1points==0 && player1wager==0
+
+                ){
 
                     int score1 = Integer.parseInt(temp3);
                     int score2 = Integer.parseInt(temp4);
-
-                    temp = (TextView)findViewById(R.id.player1Cards);
-                    String temp2 = temp.getText().toString();
-                    int player1cards = Integer.parseInt(temp2);
-
-                    temp = (TextView)findViewById(R.id.player2Cards);
-                    temp2 = temp.getText().toString();
-                    int player2cards = Integer.parseInt(temp2);
-
-                    temp = (TextView)findViewById(R.id.player1Points);
-                    temp2 = temp.getText().toString();
-                    int player1points = Integer.parseInt(temp2);
-
-                    temp = (TextView)findViewById(R.id.player2Points);
-                    temp2 = temp.getText().toString();
-                    int player2points = Integer.parseInt(temp2);
-
-                    temp = (TextView)findViewById(R.id.player1Wager);
-                    temp2 = temp.getText().toString();
-                    int player1wager = Integer.parseInt(temp2);
-
-                    temp = (TextView)findViewById(R.id.player2Wager);
-                    temp2 = temp.getText().toString();
-                    int player2wager = Integer.parseInt(temp2);
 
                     if (!isEdit){
                     Game test = new Game(player1cards,player2cards,player1points,player2points,player1wager,player2wager,score1,score2);
@@ -318,18 +377,53 @@ public class AddGame extends AppCompatActivity {
                         }
                     }
 
-
+                    //saveData();
                     Toast.makeText(this,"Added "+Integer.toString(gameManager.gameCount), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
-                    Toast.makeText(this,"Empty fields detected", Toast.LENGTH_SHORT).show();
+                    if (player1cards==0 || player2cards==0){
+                        Toast.makeText(this,"If 0 Cards Played, others must be 0", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(this, "Empty fields detected", Toast.LENGTH_SHORT).show();
+                    }
                 }
         }
         else if (item.getItemId() == R.id.deleteButton){
-            gameManager.deleteGame(position+1);
-            Toast.makeText(this,"deleted game "+position,Toast.LENGTH_SHORT).show();
-            finish();
+
+            //gameManager.deleteGame(position+1);
+            //Toast.makeText(AddGame.this,"deleted game "+position,Toast.LENGTH_SHORT).show();
+            //finish();
+
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle("WARNING").setMessage("Are you sure you want to delete?").setPositiveButton("Confirm", null).setNegativeButton("I'm scared", null).show();
+
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(isEdit) {
+                        gameManager.deleteGame(position + 1);
+                        Toast.makeText(AddGame.this, "deleted game " + position, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(AddGame.this, "Game never saved", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            negativeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(AddGame.this, "Aborted", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            //finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -340,6 +434,9 @@ public class AddGame extends AppCompatActivity {
         if (cards >=8){
             temp = temp+20;
         }
+        else if (cards == 0){
+            return 0;
+        }
         return temp;
     }
 
@@ -347,14 +444,78 @@ public class AddGame extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
+            Toast.makeText(this,"back button", Toast.LENGTH_SHORT).show();
             Intent refresh = new Intent(this, MainActivity.class);
             startActivity(refresh);
             this.finish();
         }
     }
 
+    private void saveData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(gameManager.games);
+        editor.putString("games", json);
+        editor.apply();
+    }
 
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();
+        //Toast.makeText(AddGame.this,"bottom back button", Toast.LENGTH_SHORT).show();
+        //AlertDialog dialog3 = new AlertDialog.Builder(this).setTitle("WARNING").setMessage("Unsaved Changed. Do you want to continue?").setPositiveButton("Confirm", null).setNegativeButton("Back", null).show();
 
+        //AlertDialog.Builder dialog3 = new AlertDialog.Builder(this);
+        //dialog3.setTitle("Exit");
+        //dialog3.setMessage("Are you sure you want to exit?");
+
+        //dialog3.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            //@Override
+            //public void onClick(DialogInterface dialogInterface, int i) {
+                //finish();
+            //}
+        //});
+
+        //dialog3.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            //@Override
+            //public void onClick(DialogInterface dialogInterface, int i) {
+                //dialogInterface.cancel();
+            //}
+        //});
+        //dialog3.create().show();
+
+        Toast.makeText(AddGame.this,"back button", Toast.LENGTH_SHORT).show();
+        if(hasEdit){
+            Toast.makeText(AddGame.this,"entered loop", Toast.LENGTH_SHORT).show();
+
+            AlertDialog dialog2 = new AlertDialog.Builder(this).setTitle("WARNING").setMessage("Unsaved Changed. Do you want to continue?").setPositiveButton("Confirm", null).setNegativeButton("Back", null).show();
+
+            Button positiveButton = dialog2.getButton(AlertDialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //gameManager.deleteGame(position+1);
+                    //Toast.makeText(AddGame.this,"deleted game "+position,Toast.LENGTH_SHORT).show();
+                    dialog2.dismiss();
+                    finish();
+                }
+            });
+
+            Button negativeButton = dialog2.getButton(AlertDialog.BUTTON_NEGATIVE);
+            negativeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(AddGame.this, "Aborted", Toast.LENGTH_SHORT).show();
+                    dialog2.dismiss();
+                }
+            });
+        }
+        else{
+            finish();
+        }
+
+    }
     //@Override
     //public boolean onSupportNavigateUp() {
         //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_add_da_thing);
