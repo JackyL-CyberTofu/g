@@ -47,6 +47,13 @@
         android:layout_marginTop="275dp"
         app:srcCompat="@drawable/ic_baseline_follow_the_signs_24" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="319dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="625dp"
+        android:text="Optional Feature: \nEdit and Delete Game \n Complex List view \n confirm on cancel edit \n save data \n Empty State" />
+
     <ListView
         android:id="@+id/gamelist"
         android:layout_marginTop="58dp"

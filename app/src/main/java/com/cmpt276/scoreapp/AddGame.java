@@ -64,6 +64,8 @@ public class AddGame extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+
+
         Bundle extras = getIntent().getExtras();
 
         if(extras!=null){
@@ -74,6 +76,8 @@ public class AddGame extends AppCompatActivity {
 
         if(isEdit){
             Toast.makeText(this,"editing with title "+title,Toast.LENGTH_SHORT).show();
+
+
             //this.setTitle("Edit Game");
         }
 
@@ -82,6 +86,11 @@ public class AddGame extends AppCompatActivity {
         binding = ActivityAddDaThingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if(isEdit){
+            TextView time2 = (TextView) findViewById(R.id.timeText);
+            Toast.makeText(this,gameManager.getGame(position).time,Toast.LENGTH_SHORT).show();
+            time2.setText(gameManager.getGame(position).time);
+        }
         // UP/BACK Button
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
