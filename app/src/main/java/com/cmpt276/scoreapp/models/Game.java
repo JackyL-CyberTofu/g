@@ -1,3 +1,5 @@
+// Manages the scores of players from each game.
+
 package com.cmpt276.scoreapp.models;
 
 import java.time.LocalDateTime;

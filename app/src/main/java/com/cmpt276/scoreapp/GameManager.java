@@ -1,3 +1,5 @@
+// Manages the list of Games
+
 package com.cmpt276.scoreapp;
 import com.cmpt276.scoreapp.models.Game;
 

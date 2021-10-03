@@ -1,3 +1,7 @@
+// Main Activity App
+// Displays the Empty State and ListView
+// Jacky Lim
+
 package com.cmpt276.scoreapp.models;
 
 import android.content.Intent;
@@ -38,18 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     GameManager gameManager = GameManager.getInstance();
-    //SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-
-
-    //ArrayAdapter<Game> adapter = new MyListAdapter();
-    //ArrayAdapter<Game> adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        //TextView testView = (TextView)findViewById(R.id.test);
         loadData();
         super.onCreate(savedInstanceState);
 
@@ -58,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        this.setTitle("Score App");
 
         binding.fab.setOnClickListener(view -> {
             Intent i = AddGame.makeLaunchIntent(MainActivity.this,"Add New Game");
@@ -79,15 +73,12 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (gameManager.gameCount!=0){
-                Toast.makeText(view.getContext(), "Clicked on item "+i, Toast.LENGTH_SHORT).show();}
                 Intent k = AddGame.makeLaunchIntent(MainActivity.this,"Add New Game");
                 k.putExtra("position", i);
                 k.putExtra("isEdit", true);
                 k.putExtra("title", "Edit Game");
                 startActivity(k);
-                //saveData();
-                //adapter.notifyDataSetChanged();
+
             }
         });
 
@@ -98,12 +89,9 @@ public class MainActivity extends AppCompatActivity {
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        //editor.putString("GameList", Objectser)
         Gson gson = new Gson();
         String json = gson.toJson(gameManager.games);
         editor.putString("games", json);
-
-        //sharedPreferences.set
         editor.apply();
     }
 
@@ -113,27 +101,17 @@ public class MainActivity extends AppCompatActivity {
         String json = sharedPreferences.getString("games", "");
         Type type = new TypeToken<ArrayList<Game>>() {}.getType();
         gameManager.games = gson.fromJson(json,type);
-        //if (gameManager==null){
-            //gameManager.games = new ArrayList<>();
-        //}
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -157,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(){
         saveData();
-        //loadData();
         ArrayAdapter<Game> adapter = new MyListAdapter();
         populateListView();
         ListView list = (ListView) findViewById(R.id.gamelist);
@@ -193,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             TextView upper = (TextView) itemView.findViewById(R.id.textView1);
-            upper.setText(gameManager.getGame(position).getScore1() + " vs " + gameManager.getGame(position).getScore2());
+            upper.setText(String.format("%s vs %s", gameManager.getGame(position).getScore1(), gameManager.getGame(position).getScore2()));
 
             TextView under = (TextView) itemView.findViewById(R.id.textView2);
             if (gameManager.getGame(position).tie){
@@ -209,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.ic_baseline_looks_two_24);
 
             }
-
 
             //Fill the view
             return itemView;
