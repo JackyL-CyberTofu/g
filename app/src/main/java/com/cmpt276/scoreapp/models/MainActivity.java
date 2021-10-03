@@ -1,4 +1,4 @@
-package com.cmpt276.scoreapp;
+package com.cmpt276.scoreapp.models;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,12 +11,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.cmpt276.scoreapp.AddGame;
+import com.cmpt276.scoreapp.GameManager;
+import com.cmpt276.scoreapp.R;
 import com.cmpt276.scoreapp.databinding.ActivityMainBinding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +29,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

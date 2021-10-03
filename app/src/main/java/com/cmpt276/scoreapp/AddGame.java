@@ -2,7 +2,6 @@ package com.cmpt276.scoreapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,13 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +24,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.cmpt276.scoreapp.databinding.ActivityAddDaThingBinding;
-import com.cmpt276.scoreapp.MainActivity;
+import com.cmpt276.scoreapp.models.Game;
+import com.cmpt276.scoreapp.models.MainActivity;
 import com.google.gson.Gson;
-
-
-import java.text.BreakIterator;
 
 public class AddGame extends AppCompatActivity {
 
@@ -322,28 +317,53 @@ public class AddGame extends AppCompatActivity {
                 String temp4 = temp.getText().toString();
 
                 temp = (TextView)findViewById(R.id.player1Cards);
-                String temp2 = temp.getText().toString();
-                int player1cards = Integer.parseInt(temp2);
+                String temp6 = temp.getText().toString();
+                temp = (TextView)findViewById(R.id.player2Cards);
+                String temp7 = temp.getText().toString();
+
+                if (!temp3.equals("-") && !temp4.equals("-") && !temp6.equals("0") && !temp7.equals("0")){
+                    Toast.makeText(this,temp3 + " "+ temp4,Toast.LENGTH_SHORT).show();
+                    temp = (TextView)findViewById(R.id.scoresOne);
+                    temp3 = temp.getText().toString();
+
+                    temp = (TextView)findViewById(R.id.scoresTwo);
+                    temp4 = temp.getText().toString();
+
+                    temp = (TextView)findViewById(R.id.player1Cards);
+                    String temp2 = temp.getText().toString();
+                    int player1cards = 0;
+                    if (!temp2.equals("")){
+                    player1cards = Integer.parseInt(temp2);}
 
                 temp = (TextView)findViewById(R.id.player2Cards);
                 temp2 = temp.getText().toString();
-                int player2cards = Integer.parseInt(temp2);
+                int player2cards=0;
+                if (!temp2.equals("")){
+                player2cards = Integer.parseInt(temp2);}
 
                 temp = (TextView)findViewById(R.id.player1Points);
                 temp2 = temp.getText().toString();
-                int player1points = Integer.parseInt(temp2);
+                int player1points=0;
+                if (!temp2.equals("")){
+                player1points = Integer.parseInt(temp2);}
 
                 temp = (TextView)findViewById(R.id.player2Points);
                 temp2 = temp.getText().toString();
-                int player2points = Integer.parseInt(temp2);
+                int player2points=0;
+                if (!temp2.equals("")){
+                player2points = Integer.parseInt(temp2);}
 
                 temp = (TextView)findViewById(R.id.player1Wager);
                 temp2 = temp.getText().toString();
-                int player1wager = Integer.parseInt(temp2);
+                int player1wager=0;
+                if (!temp2.equals("")){
+                player1wager = Integer.parseInt(temp2);}
 
                 temp = (TextView)findViewById(R.id.player2Wager);
                 temp2 = temp.getText().toString();
-                int player2wager = Integer.parseInt(temp2);
+                int player2wager=0;
+                if (!temp2.equals("")){
+                player2wager = Integer.parseInt(temp2);}
 
                 if (!temp3.equals("-") && !temp4.equals("-") && player1cards!=0  && player1points!=0 && player1wager!=0 && player2cards!=0  && player2points!=0 && player2wager!=0||
                         !temp3.equals("-") && !temp4.equals("-") && player1cards==0  && player1points==0 && player1wager==0 && player2cards!=0  && player2points!=0 && player2wager!=0 ||
@@ -384,14 +404,21 @@ public class AddGame extends AppCompatActivity {
                             gameManager.getGame(position).playerOneWin = false;
                             gameManager.getGame(position).playerTwoWin = true;
                         }
-                    }
+                    }}
 
                     //saveData();
                     Toast.makeText(this,"Added "+Integer.toString(gameManager.gameCount), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
-                    if (player1cards==0 || player2cards==0){
+                    temp = (TextView)findViewById(R.id.player1Cards);
+                    temp6 = temp.getText().toString();
+                    temp = (TextView)findViewById(R.id.player2Cards);
+                    temp7 = temp.getText().toString();
+                    if (temp6.equals("0")){
+                        Toast.makeText(this,"If 0 Cards Played, others must be 0", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(temp7.equals("0")){
                         Toast.makeText(this,"If 0 Cards Played, others must be 0", Toast.LENGTH_SHORT).show();
                     }
                     else {

@@ -1,4 +1,4 @@
-package com.cmpt276.scoreapp;
+package com.cmpt276.scoreapp.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -6,33 +6,33 @@ import java.util.ArrayList;
 
 public class Game {
 
-    LocalDateTime creationTime;
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(@yyyy-MM-dd HH:mm)");
-    String time;
+    public LocalDateTime creationTime;
+    public DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(@yyyy-MM-dd HH:mm)");
+    public String time;
 
-    int playerWon=0;
-    int playerCount=0;
-    int maxScore;
+    public int playerWon=0;
+    public int playerCount=0;
+    public int maxScore;
 
     public boolean tie = false;
     public boolean playerOneWin = false;
     public boolean playerTwoWin = false;
 
-    int playerOneScore = 0;
-    int playerTwoScore = 0;
+    public int playerOneScore = 0;
+    public int playerTwoScore = 0;
 
-    int playerOneCards = 0;
-    int playerTwoCards = 0;
+    public int playerOneCards = 0;
+    public int playerTwoCards = 0;
 
-    int playerOnePoints = 0;
-    int playerTwoPoints = 0;
+    public int playerOnePoints = 0;
+    public int playerTwoPoints = 0;
 
-    int playerOneWager = 0;
-    int playerTwoWager = 0;
+    public int playerOneWager = 0;
+    public int playerTwoWager = 0;
 
-    boolean isEdit = false;
+    public boolean isEdit = false;
 
-    ArrayList<Integer> scores = new ArrayList<Integer>();
+    public ArrayList<Integer> scores = new ArrayList<Integer>();
 
     public Game(int cards1, int cards2, int points1, int points2, int wager1, int wager2, int score1, int score2) {
 

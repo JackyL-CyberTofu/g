@@ -1,13 +1,13 @@
 package com.cmpt276.scoreapp;
-import com.cmpt276.scoreapp.Game;
+import com.cmpt276.scoreapp.models.Game;
 
 
 import java.util.ArrayList;
 
 public class GameManager {
 
-    ArrayList<Game> games = new ArrayList<Game>();
-    int gameCount = 0;
+    public ArrayList<Game> games = new ArrayList<Game>();
+    public int gameCount = 0;
 
     // Singleton Support
     private static GameManager instance;
