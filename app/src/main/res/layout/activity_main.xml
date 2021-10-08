@@ -51,7 +51,7 @@
         android:id="@+id/textView3"
         android:layout_width="319dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="625dp"
+        android:layout_marginTop="550dp"
         android:text="Optional Feature: \nEdit and Delete Game \n Complex List view \n confirm on cancel edit \n save data \n Empty State" />
 
     <ListView
