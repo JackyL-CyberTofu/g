@@ -1,7 +1,6 @@
 // Manages the list of Games
 
-package com.cmpt276.scoreapp;
-import com.cmpt276.scoreapp.models.Game;
+package com.cmpt276.scoreapp.models;
 
 
 import java.util.ArrayList;

@@ -14,9 +14,9 @@
             android:exported="true"
             android:label="@string/title_activity_add_da_thing"
             android:theme="@style/Theme.ScoreApp.NoActionBar"
-            android:parentActivityName=".models.MainActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".models.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ScoreApp.NoActionBar">

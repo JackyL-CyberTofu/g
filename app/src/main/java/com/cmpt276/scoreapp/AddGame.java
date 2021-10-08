@@ -27,7 +27,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import com.cmpt276.scoreapp.databinding.ActivityAddDaThingBinding;
 import com.cmpt276.scoreapp.models.Game;
-import com.cmpt276.scoreapp.models.MainActivity;
+import com.cmpt276.scoreapp.models.GameManager;
 
 import java.util.Objects;
 
